@@ -1,0 +1,5 @@
+padasip
+numpy
+scipy
+matplotlib
+tqdm

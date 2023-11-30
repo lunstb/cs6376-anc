@@ -1,6 +1,6 @@
 import numpy as np
 import padasip as pa
-from controller import Controller
+from controllers.controller import Controller
 
 class NLMS(Controller):
 
@@ -24,7 +24,7 @@ class NLMS(Controller):
         self.history_window = np.append(self.history_window, wav_signal)
         self.history_window = self.history_window[1:]
 
-        return self.nlms_filter.predict(self.history_window)
+        return -1 * self.nlms_filter.predict(self.history_window)
 
     # Update filter weights based on reference signal and previous input
     def feed_forward(self, reference_signal):
