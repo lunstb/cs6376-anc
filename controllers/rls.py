@@ -10,7 +10,7 @@ class RLS(Controller):
         
         # Using Padasip, create an RLS filter
         self.filter_size = 4
-        self.rls_filter = pa.filters.FilterRLS(mu=1.0, n=self.filter_size)
+        self.rls_filter = pa.filters.FilterRLS(mu=0.9, n=self.filter_size)
         
         # Keep a history window of previous input signals as a state variable 
         self.history_window = np.zeros(self.filter_size)
