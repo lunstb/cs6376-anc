@@ -7,9 +7,10 @@ import padasip as pa
 class ReferenceFul:
 
     # Constructor
-    def __init__(self, noise_file_path, reference_file_path, controller):
+    def __init__(self, noise_file_path, reference_file_path, controller, num_timesteps = 400000):
         self.noise_file_path = noise_file_path
         self.fs, self.input_noise = wav.read(self.noise_file_path)
+        self.n = num_timesteps
         
         # If the noise is 2D, convert it to 1D by choosing left signal always
         # if len(self.input_noise.shape) != 1:
@@ -17,8 +18,7 @@ class ReferenceFul:
         self.input_noise = self.input_noise.ravel()
         # Preprocess input background noise for signal processing by scaling from -1 to 1
         self.input_noise = self.input_noise / np.max(np.abs(self.input_noise))
-        self.input_noise = self.input_noise[:400000]
-        self.n = len(self.input_noise)
+        self.input_noise = self.input_noise[:self.n]
 
         self.reference_file_path = reference_file_path
         _, self.reference_noise = wav.read(self.reference_file_path)
@@ -29,7 +29,7 @@ class ReferenceFul:
         self.reference_noise = self.reference_noise.ravel()
         # Preprocess reference noise for signal processing by scaling from -1 to 1
         self.reference_noise = self.reference_noise / np.max(np.abs(self.reference_noise))
-        self.reference_noise = self.reference_noise[:400000]
+        self.reference_noise = self.reference_noise[:self.n]
 
         # Combine background noise file with reference file to make "noisy" simulation atmosphere
         # Essentially, combine background chatter with reference music
@@ -112,7 +112,7 @@ class ReferenceFul:
         plt.legend()
         plt.savefig(f"{output_file_name}-ful.png")
     
-    def plot_signals(self, signals, output_file_name="spectrograms"):
+    def plot_signals(self, signals, output_file_name="reference-ful-output"):
         num_signals = len(signals)
 
         # Create a subplot grid with 2 rows and 2 columns

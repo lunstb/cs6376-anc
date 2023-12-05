@@ -6,9 +6,10 @@ import padasip as pa
 class ReferenceLess:
 
     # Constructor
-    def __init__(self, noise_file_path, controller):
+    def __init__(self, noise_file_path, controller, num_timesteps=400000):
         self.noise_file_path = noise_file_path
         self.fs, self.reference_noise = wav.read(self.noise_file_path)
+        self.n = num_timesteps
         
         # If the noise is 2D, convert it to 1D by choosing left signal always
         if len(self.reference_noise.shape) != 1:
