@@ -1,5 +1,6 @@
 from reference_less import ReferenceLess
 from reference_ful import ReferenceFul
+from filtered import Filtered
 import matplotlib.pyplot as plt
 from controllers.nlms import NLMS
 from controllers.rls import RLS
@@ -16,6 +17,9 @@ simulation = ReferenceFul("sounds/coffeeshop.wav", "sounds/song.wav", rls)
 
 # Run a ReferenceLess simulation
 #simulation = ReferenceLess("sounds/coffeeshop.wav", rls)
+
+# Run a Filtered simulation
+#simulation = Filtered("sounds/coffeeshop.wav", rls)
 
 rls_difference = simulation.simulate()
 nlms_difference = simulation.simulate(new_controller=nlms)
