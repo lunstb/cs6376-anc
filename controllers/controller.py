@@ -25,5 +25,6 @@ class Controller(ABC):
     def input(self, wav_signal):
         pass
 
+    # Hybrid Controllers can implement this 
     def feed_forward(self, reference_signal):
         pass
