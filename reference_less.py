@@ -11,12 +11,11 @@ class ReferenceLess:
         self.fs, self.reference_noise = wav.read(self.noise_file_path)
         self.n = num_timesteps
         
-        # If the noise is 2D, convert it to 1D by choosing left signal always
-        if len(self.reference_noise.shape) != 1:
-            self.reference_noise = self.reference_noise[:,0]
+        # If the noise is 2D, convert it to 1D
+        self.reference_noise = self.reference_noise.ravel()
         # Preprocess reference noise for signal processing by scaling from -1 to 1
         self.reference_noise = self.reference_noise / np.max(np.abs(self.reference_noise))
-        self.reference_noise = self.reference_noise[:400000]
+        self.reference_noise = self.reference_noise[:self.n]
         self.n = len(self.reference_noise)
 
         self.controller = controller
@@ -96,4 +95,3 @@ class ReferenceLess:
         plt.legend()
         plt.savefig(f"{output_file_name}.png")
         plt.show()
-            
