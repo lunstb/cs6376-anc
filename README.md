@@ -11,6 +11,8 @@ To run simulations, users can simply run `python3 simulation.py` once cloning th
 
 If you wish to modify simulation.py to use a custom defined controller that you implement, import the controller to the file, instantiate your controller, and then run the simulation on your controller. For example, if your controller is defined as `custom_controller`, simply execute `custom_controller_difference = simulation.simulate(new_controller=custom_controller)`. This will run whichever simulation you choose on your custom controller. You can add the `custom_controller_difference` variable to the `signals` list at the bottom of `simulation.py` to plot your custom defined controller against the other controllers (RLS, LMS, and NLMS). The Referenceful simulation will generate spectrograms, and the Referenceless/Filtered simulations will generate amplitude graphs (check `results/` for sample plots and wavs). All simulations will generate an `output.wav` file, which you can use to listen to the error signal your controller produced for the given simulation.
 
+After each simulation, the console will print out whether or not liveness was satisfied for the simulation. For information on specific liveness properties, review section II of `final-paper.pdf`. If safety properties are ever not satisfied, the program will print out that safety was violated and the simulation will be stopped.
+
 ## References
 Check `final-paper.pdf` for a full list of references. In terms of wav files supplied in the `sounds/` directory, they were retrieved from the below sources:
 

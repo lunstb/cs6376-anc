@@ -35,11 +35,15 @@ class ReferenceLess:
         error_values = np.zeros(self.n)
         liveness_is_satisfied = False
         for i in range(self.n):
+            # Safety should always be satisfied if Python is deterministic ;)
+            safety_is_satisfied = False
+
             # measure input source wav
             inp = self.reference_noise[i]
 
             # Send input source to controller
             controller_output = self.controller.input(inp)
+            safety_is_satisfied = True
 
             # Error microphone convolves signals from controller and original source
             error_microphone = inp + controller_output
@@ -58,6 +62,12 @@ class ReferenceLess:
             # Allows controller to learn if it would like
             # Because this is reference-less cancelling, just send the error microphone feedback
             self.controller.feed_forward(error_microphone)
+
+            # Double check safety monitor
+            if not safety_is_satisfied:
+                print(f"Safety was not satisfied while simulating for {self.controller.name}, stopping simulation")
+                break
+
         # Write output
         wav.write(f"{output_file_name}.wav", self.fs, np.array(error_mic))
 

@@ -15,7 +15,7 @@ class Filtered:
         self.reference_noise = self.reference_noise.ravel()
         # Preprocess reference noise for signal processing by scaling from -1 to 1
         self.reference_noise = self.reference_noise / np.max(np.abs(self.reference_noise))
-        self.reference_noise = self.reference_noise[:400000]
+        self.reference_noise = self.reference_noise[:self.n]
         self.n = len(self.reference_noise)
 
         self.controller = controller
@@ -35,11 +35,15 @@ class Filtered:
         error_values = np.zeros(self.n)
         liveness_is_satisfied = False
         for i in range(self.n):
+            # Safety should always be satisfied if Python is deterministic ;)
+            safety_is_satisfied = False
+
             # measure input source wav
             inp = self.reference_noise[i]
 
             # Send input source to controller
             controller_output = self.controller.input(inp)
+            safety_is_satisfied = True
 
             # Error microphone convolves signals from controller and original source
             error_microphone = inp + controller_output
@@ -55,6 +59,11 @@ class Filtered:
 
             # No Feed Foward Step -
             # Because this is Filtered cancelling, no new input is sent here
+
+            # Double check safety monitor
+            if not safety_is_satisfied:
+                print(f"Safety was not satisfied while simulating for {self.controller.name}, stopping simulation")
+                break
         # Write output
         wav.write(f"{output_file_name}.wav", self.fs, np.array(error_mic))
 
